@@ -121,9 +121,9 @@
 }
 
 @layer components {
-  /* Neovim-specific component styles */
+  /* Neовim-specific component styles */
   .nvim-file-tree {
-    @apply bg-nvim-tree text-nvim-tree-file border-r border-nvim-border;
+    @apply bg-nvim-tree-bg text-nvim-tree-file border-r border-nvim-border;
     width: 300px;
     min-width: 300px;
   }
