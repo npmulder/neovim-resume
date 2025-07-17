@@ -1,96 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Neovim-themed design system with authentic editor colors */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Core Neovim color palette */
+    --nvim-bg: 220 13% 10%;              /* #1a1a1a - Deep dark background */
+    --nvim-bg-alt: 220 13% 16%;          /* #2a2a2a - Slightly lighter bg */
+    --nvim-bg-highlight: 220 13% 18%;    /* #303030 - Line highlight */
+    --nvim-bg-visual: 220 13% 22%;       /* #383838 - Visual selection */
+    
+    /* Text colors */
+    --nvim-fg: 218 12% 70%;              /* #abb2bf - Main text */
+    --nvim-fg-alt: 218 12% 60%;          /* #979eab - Secondary text */
+    --nvim-comment: 218 12% 40%;         /* #5c6370 - Comments */
+    --nvim-linenr: 218 12% 35%;          /* #495162 - Line numbers */
+    
+    /* Syntax highlighting colors */
+    --nvim-orange: 22 100% 60%;          /* #ff6b35 - Functions, orange */
+    --nvim-orange-bright: 22 100% 65%;   /* #ff8c42 - Bright orange */
+    --nvim-green: 164 100% 40%;          /* #00c896 - Strings, green */
+    --nvim-green-bright: 122 39% 49%;    /* #4caf50 - Bright green */
+    --nvim-blue: 204 70% 66%;            /* #61afef - Keywords, blue */
+    --nvim-blue-bright: 184 60% 56%;     /* #56b6c2 - Bright blue */
+    --nvim-purple: 270 50% 65%;          /* #c678dd - Keywords, purple */
+    --nvim-red: 355 65% 65%;             /* #e06c75 - Errors, red */
+    --nvim-yellow: 45 100% 65%;          /* #e5c07b - Warnings, yellow */
+    --nvim-cyan: 187 47% 55%;            /* #56b6c2 - Cyan */
+    
+    /* UI element colors */
+    --nvim-border: 220 13% 25%;          /* #404040 - Borders */
+    --nvim-cursor: 204 70% 66%;          /* #61afef - Cursor */
+    --nvim-cursor-line: 220 13% 15%;     /* #252525 - Current line */
+    --nvim-selection: 204 70% 66%;       /* #61afef - Selection */
+    --nvim-search: 45 100% 65%;          /* #e5c07b - Search highlight */
+    
+    /* Status bar colors */
+    --nvim-statusline: 220 13% 20%;      /* #333333 - Status line bg */
+    --nvim-statusline-fg: 218 12% 70%;   /* #abb2bf - Status line text */
+    --nvim-mode-normal: 164 100% 40%;    /* #00c896 - Normal mode */
+    --nvim-mode-insert: 22 100% 60%;     /* #ff6b35 - Insert mode */
+    --nvim-mode-visual: 270 50% 65%;     /* #c678dd - Visual mode */
+    
+    /* File tree colors */
+    --nvim-tree-bg: 220 13% 12%;         /* #1e1e1e - Tree background */
+    --nvim-tree-folder: 45 100% 65%;     /* #e5c07b - Folder color */
+    --nvim-tree-file: 218 12% 70%;       /* #abb2bf - File color */
+    --nvim-tree-active: 204 70% 66%;     /* #61afef - Active file */
+    --nvim-tree-hover: 220 13% 18%;      /* #303030 - Hover state */
+    
+    /* Map to shadcn tokens */
+    --background: var(--nvim-bg);
+    --foreground: var(--nvim-fg);
+    --card: var(--nvim-bg-alt);
+    --card-foreground: var(--nvim-fg);
+    --popover: var(--nvim-bg-alt);
+    --popover-foreground: var(--nvim-fg);
+    --primary: var(--nvim-orange);
+    --primary-foreground: var(--nvim-bg);
+    --secondary: var(--nvim-bg-alt);
+    --secondary-foreground: var(--nvim-fg);
+    --muted: var(--nvim-bg-highlight);
+    --muted-foreground: var(--nvim-comment);
+    --accent: var(--nvim-blue);
+    --accent-foreground: var(--nvim-bg);
+    --destructive: var(--nvim-red);
+    --destructive-foreground: var(--nvim-bg);
+    --border: var(--nvim-border);
+    --input: var(--nvim-bg-alt);
+    --ring: var(--nvim-cursor);
+    --radius: 0.25rem;
+    
+    /* Animations */
+    --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
@@ -98,8 +85,164 @@ All colors MUST be HSL.
   * {
     @apply border-border;
   }
-
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-mono;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow: hidden; /* Prevent body scroll, like Neovim */
+  }
+  
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--nvim-bg));
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--nvim-border));
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--nvim-comment));
+  }
+  
+  /* Selection styling */
+  ::selection {
+    background: hsl(var(--nvim-selection) / 0.3);
+    color: hsl(var(--nvim-fg));
+  }
+}
+
+@layer components {
+  /* Neovim-specific component styles */
+  .nvim-file-tree {
+    @apply bg-nvim-tree text-nvim-tree-file border-r border-nvim-border;
+    width: 300px;
+    min-width: 300px;
+  }
+  
+  .nvim-editor {
+    @apply bg-nvim-bg text-nvim-fg flex-1 overflow-hidden;
+  }
+  
+  .nvim-statusline {
+    @apply bg-nvim-statusline text-nvim-statusline-fg border-t border-nvim-border;
+    height: 24px;
+    font-size: 12px;
+  }
+  
+  .nvim-line-number {
+    @apply text-nvim-linenr text-right pr-4 select-none;
+    width: 50px;
+    font-size: 12px;
+  }
+  
+  .nvim-cursor-line {
+    @apply bg-nvim-cursor-line;
+  }
+  
+  .nvim-mode-normal {
+    @apply bg-nvim-mode-normal text-nvim-bg;
+  }
+  
+  .nvim-mode-insert {
+    @apply bg-nvim-mode-insert text-nvim-bg;
+  }
+  
+  .nvim-mode-visual {
+    @apply bg-nvim-mode-visual text-nvim-bg;
+  }
+  
+  .nvim-file-icon {
+    @apply text-nvim-tree-folder;
+  }
+  
+  .nvim-folder-icon {
+    @apply text-nvim-tree-folder;
+  }
+  
+  .nvim-syntax-keyword {
+    @apply text-nvim-purple font-medium;
+  }
+  
+  .nvim-syntax-string {
+    @apply text-nvim-green;
+  }
+  
+  .nvim-syntax-comment {
+    @apply text-nvim-comment italic;
+  }
+  
+  .nvim-syntax-function {
+    @apply text-nvim-orange;
+  }
+  
+  .nvim-syntax-number {
+    @apply text-nvim-red;
+  }
+  
+  .nvim-syntax-operator {
+    @apply text-nvim-blue;
+  }
+  
+  .nvim-hover-bg {
+    @apply hover:bg-nvim-tree-hover transition-colors duration-100;
+  }
+  
+  .nvim-active-file {
+    @apply bg-nvim-tree-hover text-nvim-tree-active;
+  }
+  
+  .nvim-smooth-scroll {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Animations */
+@layer utilities {
+  .animate-blink {
+    animation: blink 1s infinite;
+  }
+  
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-slide-right {
+    animation: slideRight 0.2s ease-out;
+  }
+  
+  @keyframes slideRight {
+    from {
+      transform: translateX(-10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
   }
 }
