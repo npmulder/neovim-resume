@@ -16,39 +16,25 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Stage 2: Serve the application with Nginx
-FROM nginx:alpine
+# Stage 2: Serve the application with Node.js
+FROM node:18-alpine
+
+# Install serve globally for production static file serving
+RUN npm install -g serve
+
+# Create non-root user for security
+RUN addgroup -g 1001 -S nodejs \
+    && adduser -S nextjs -u 1001
 
 # Copy the built files from the build stage
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist /app
 
-# Create nginx cache directories and set permissions for non-root user
-RUN mkdir -p /var/cache/nginx/client_temp \
-    /var/cache/nginx/proxy_temp \
-    /var/cache/nginx/fastcgi_temp \
-    /var/cache/nginx/uwsgi_temp \
-    /var/cache/nginx/scgi_temp \
-    && chown -R nginx:nginx /var/cache/nginx \
-    && chmod -R 755 /var/cache/nginx \
-    && chown -R nginx:nginx /var/log/nginx \
-    && chmod -R 755 /var/log/nginx
-
-# Create nginx config that works with read-only filesystem
-RUN echo 'server { \
-    listen 8080; \
-    location / { \
-        root /usr/share/nginx/html; \
-        index index.html index.htm; \
-        try_files $uri $uri/ /index.html; \
-    } \
-}' > /etc/nginx/conf.d/default.conf \
-    && rm -f /etc/nginx/conf.d/default.conf.dpkg-dist
+# Change ownership to non-root user
+RUN chown -R nextjs:nodejs /app
+USER nextjs
 
 # Expose port 8080
 EXPOSE 8080
 
-# Run nginx as non-root user
-USER nginx
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Serve the static files with proper SPA routing
+CMD ["serve", "-s", "/app", "-l", "8080"]
