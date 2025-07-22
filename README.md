@@ -62,6 +62,48 @@ This project is built with:
 
 ## How can I deploy this project?
 
+### Using Docker
+
+This project includes Docker support for easy deployment. You can either build the Docker image locally or pull the pre-built image from GitHub Container Registry.
+
+#### Option 1: Build locally
+
+```sh
+# Build the Docker image
+docker build -t neovim-resume .
+
+# Run the container
+docker run -p 8080:8080 neovim-resume
+```
+
+#### Option 2: Pull from GitHub Container Registry
+
+```sh
+# Pull the latest image
+docker pull ghcr.io/OWNER/neovim-resume:latest
+
+# Run the container
+docker run -p 8080:8080 ghcr.io/OWNER/neovim-resume:latest
+```
+
+Replace `OWNER` with the GitHub username or organization that owns this repository.
+
+The application will be available at http://localhost:8080
+
+#### CI/CD with GitHub Actions
+
+This project uses GitHub Actions to automatically build and publish the Docker image to GitHub Container Registry whenever changes are pushed to the main branch. The workflow:
+
+1. Builds and tests the application
+2. Builds the Docker image
+3. Pushes the image to GitHub Container Registry (ghcr.io)
+
+You can view the workflow configuration in [.github/workflows/docker-build-publish.yml](./.github/workflows/docker-build-publish.yml).
+
+For detailed information about the Docker setup, including production considerations, see [Docker Setup Documentation](./docs/docker-setup.md).
+
+### Using Lovable
+
 Simply open [Lovable](https://lovable.dev/projects/62045c33-ed7e-4425-bccf-8fea842a5a61) and click on Share -> Publish.
 
 ## Can I connect a custom domain to my Lovable project?

@@ -23,8 +23,8 @@
     /* Syntax highlighting colors */
     --nvim-orange: 22 100% 60%;          /* #ff6b35 - Functions, orange */
     --nvim-orange-bright: 22 100% 65%;   /* #ff8c42 - Bright orange */
-    --nvim-green: 164 100% 40%;          /* #00c896 - Strings, green */
-    --nvim-green-bright: 122 39% 49%;    /* #4caf50 - Bright green */
+    --nvim-green: 22 100% 60%;           /* #ff6b35 - Strings, orange (was green) */
+    --nvim-green-bright: 22 100% 65%;    /* #ff8c42 - Bright orange (was green) */
     --nvim-blue: 204 70% 66%;            /* #61afef - Keywords, blue */
     --nvim-blue-bright: 184 60% 56%;     /* #56b6c2 - Bright blue */
     --nvim-purple: 270 50% 65%;          /* #c678dd - Keywords, purple */
@@ -42,7 +42,7 @@
     /* Status bar colors */
     --nvim-statusline: 220 13% 20%;      /* #333333 - Status line bg */
     --nvim-statusline-fg: 218 12% 70%;   /* #abb2bf - Status line text */
-    --nvim-mode-normal: 164 100% 40%;    /* #00c896 - Normal mode */
+    --nvim-mode-normal: 22 100% 60%;     /* #ff6b35 - Normal mode (changed from green to orange) */
     --nvim-mode-insert: 22 100% 60%;     /* #ff6b35 - Insert mode */
     --nvim-mode-visual: 270 50% 65%;     /* #c678dd - Visual mode */
     
