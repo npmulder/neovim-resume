@@ -38,7 +38,7 @@ jobs:
 
       # Run linting (allow warnings but fail on errors)
       - name: Run linting
-        run: npm run lint -- --max-warnings 0 || npm run lint
+        run: npm run lint
 
       # Build the application
       - name: Build application
