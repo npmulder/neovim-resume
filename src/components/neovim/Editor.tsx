@@ -432,7 +432,7 @@ Please configure your API server at resume-api.npmulder.dev to allow requests fr
 *⚠️ CORS Error: Unable to load live data from API*`;
   };
 
-  const formatApiResponse = (data: any, fileName: string): string => {
+  const formatApiResponse = (data: unknown, fileName: string): string => {
     // This is a placeholder - you'll need to adapt this based on your actual API responses
     try {
       if (typeof data === 'string') {
