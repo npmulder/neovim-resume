@@ -13,6 +13,10 @@ RUN npm ci
 # Copy the rest of the code
 COPY . .
 
+# Accept build argument for Google Analytics
+ARG VITE_GA_MEASUREMENT_ID
+ENV VITE_GA_MEASUREMENT_ID=${VITE_GA_MEASUREMENT_ID}
+
 # Build the application
 RUN npm run build
 
