@@ -8,8 +8,12 @@ declare global {
 export const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
 
 export const initializeAnalytics = () => {
+  console.log('Environment variables:', import.meta.env);
+  console.log('GA_MEASUREMENT_ID:', GA_MEASUREMENT_ID);
+  
   if (!GA_MEASUREMENT_ID) {
     console.warn('Google Analytics Measurement ID not found');
+    console.warn('Available env vars:', Object.keys(import.meta.env));
     return;
   }
 
