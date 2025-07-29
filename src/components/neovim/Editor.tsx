@@ -184,9 +184,12 @@ export const Editor: React.FC<EditorProps> = ({
   onLineChange,
   onColumnChange,
 }) => {
-  // Use the custom hook for API data fetching
+  // Skip API calls for project files since they have pre-loaded content
+  const shouldFetchFromApi = activeTab && !activeTab.path.includes('/projects/');
+  
+  // Use the custom hook for API data fetching (conditional)
   const { data, loading, error, isOffline, retry } = useResumeDataByPath(
-    activeTab?.path || ''
+    shouldFetchFromApi ? activeTab?.path || '' : ''
   );
 
   // Generate content based on data and file type
@@ -199,7 +202,12 @@ export const Editor: React.FC<EditorProps> = ({
       return staticContent;
     }
     
-    // Handle API data
+    // Check if this is a project file with pre-loaded content
+    if (activeTab.path.includes('/projects/')) {
+      return activeTab.content || 'Loading project content...';
+    }
+    
+    // Handle API data for non-project files
     if (loading) {
       return 'Loading...';
     }

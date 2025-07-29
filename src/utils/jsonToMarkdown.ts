@@ -233,6 +233,55 @@ export function projectsToMarkdown(projects: ProjectsResponse): string {
   return projectsMd;
 }
 
+// Convert single Project to Markdown
+export function projectToMarkdown(project: Project): string {
+  const projectMd = json2md([
+    { h1: `${project.name}${project.is_featured ? ' ⭐' : ''}` },
+    { p: project.description },
+    
+    { h3: "Technologies" },
+    { p: project.technologies.map(tech => `\`${tech}\``).join(', ') },
+    
+    { h3: "Key Features" },
+    { ul: project.key_features },
+    
+    { h3: "Project Details" },
+    { p: `**Status:** ${project.status.charAt(0).toUpperCase() + project.status.slice(1)}` },
+    { p: `**Started:** ${formatDate(project.start_date)}` },
+    
+    // Links section
+    { h3: "Links" },
+    { p: `💻 **Source Code:** [${project.github_url}](${project.github_url})` },
+  ]);
+
+  return projectMd;
+}
+
+// Helper function to sanitize project name for file name
+function sanitizeFileName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .trim();
+}
+
+// Generate projects folder structure with individual files
+export function generateProjectsStructure(projects: ProjectsResponse): { name: string; path: string; type: 'file'; content: string }[] {
+  return projects
+    .sort((a, b) => a.order_index - b.order_index)
+    .map(project => {
+      const fileName = sanitizeFileName(project.name) + '.md';
+      return {
+        name: fileName,
+        path: `/neil-mulder-portfolio/src/projects/${fileName}`,
+        type: 'file' as const,
+        content: projectToMarkdown(project)
+      };
+    });
+}
+
 // Type guards for API responses
 function isProfileResponse(data: unknown): data is ProfileResponse {
   return typeof data === 'object' && data !== null && 'name' in data && 'title' in data && 'email' in data;
@@ -374,4 +423,101 @@ export function generateFallbackContent(fileName: string): string {
     { p: "Content temporarily unavailable." },
     { blockquote: "⚠️ API temporarily unavailable. Please try again later." }
   ]);
+}
+
+// Generate fallback projects structure for when API is unavailable
+export function generateFallbackProjectsStructure(): { name: string; path: string; type: 'file'; content: string }[] {
+  const fallbackProjects = [
+    {
+      name: "E-Commerce Platform",
+      content: json2md([
+        { h1: "E-Commerce Platform ⭐" },
+        { p: "Scalable e-commerce backend built with .NET Core, handling high-volume transactions and real-time inventory management." },
+        
+        { h3: "Technologies" },
+        { p: "`C#`, `.NET Core`, `ASP.NET Core`, `PostgreSQL`, `Redis`, `Docker`, `Azure`" },
+        
+        { h3: "Key Features" },
+        { ul: [
+          "Payment processing integration with Stripe and PayPal",
+          "Real-time inventory management system",
+          "Scalable microservices architecture",
+          "Automated order processing workflow",
+          "Redis caching for performance optimization"
+        ]},
+        
+        { h3: "Project Details" },
+        { p: "**Status:** Completed" },
+        { p: "**Started:** January 2023" },
+        
+        { h3: "Links" },
+        { p: "💻 **Source Code:** [https://github.com/npmulder/ecommerce-platform](https://github.com/npmulder/ecommerce-platform)" },
+        
+        { blockquote: "⚠️ API temporarily unavailable. Showing placeholder content." }
+      ])
+    },
+    {
+      name: "Task Management API",
+      content: json2md([
+        { h1: "Task Management API" },
+        { p: "RESTful API for task and project management with team collaboration features, built using modern .NET technologies." },
+        
+        { h3: "Technologies" },
+        { p: "`C#`, `.NET 6`, `Entity Framework Core`, `SQL Server`, `JWT`, `Swagger`" },
+        
+        { h3: "Key Features" },
+        { ul: [
+          "JWT-based authentication and authorization",
+          "Real-time notifications using SignalR",
+          "Advanced filtering and search capabilities",
+          "File upload and attachment management",
+          "Comprehensive API documentation with Swagger"
+        ]},
+        
+        { h3: "Project Details" },
+        { p: "**Status:** In Progress" },
+        { p: "**Started:** March 2023" },
+        
+        { h3: "Links" },
+        { p: "💻 **Source Code:** [https://github.com/npmulder/task-management-api](https://github.com/npmulder/task-management-api)" },
+        
+        { blockquote: "⚠️ API temporarily unavailable. Showing placeholder content." }
+      ])
+    },
+    {
+      name: "Weather Dashboard",
+      content: json2md([
+        { h1: "Weather Dashboard" },
+        { p: "Modern weather application with location-based forecasts, historical data, and interactive charts built with React and .NET." },
+        
+        { h3: "Technologies" },
+        { p: "`React`, `TypeScript`, `C#`, `.NET Core`, `OpenWeather API`, `Chart.js`" },
+        
+        { h3: "Key Features" },
+        { ul: [
+          "Real-time weather data integration",
+          "Interactive charts and visualizations",
+          "Location-based weather forecasts",
+          "Historical weather data analysis",
+          "Responsive design for mobile and desktop"
+        ]},
+        
+        { h3: "Project Details" },
+        { p: "**Status:** Completed" },
+        { p: "**Started:** December 2022" },
+        
+        { h3: "Links" },
+        { p: "💻 **Source Code:** [https://github.com/npmulder/weather-dashboard](https://github.com/npmulder/weather-dashboard)" },
+        
+        { blockquote: "⚠️ API temporarily unavailable. Showing placeholder content." }
+      ])
+    }
+  ];
+
+  return fallbackProjects.map(project => ({
+    name: sanitizeFileName(project.name) + '.md',
+    path: `/neil-mulder-portfolio/src/projects/${sanitizeFileName(project.name)}.md`,
+    type: 'file' as const,
+    content: project.content
+  }));
 }

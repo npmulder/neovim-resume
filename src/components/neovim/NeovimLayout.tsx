@@ -4,6 +4,9 @@ import { Editor } from './Editor';
 import { StatusBar } from './StatusBar';
 import { TabBar } from './TabBar';
 import { KeyboardHandler } from './KeyboardHandler';
+import { useProjects } from '@/hooks/useResumeData';
+import { generateProjectsStructure, generateFallbackProjectsStructure } from '@/utils/jsonToMarkdown';
+import { trackFileExplorerClick } from '@/utils/analytics';
 
 export interface FileItem {
   name: string;
@@ -64,9 +67,11 @@ const initialFiles: FileItem[] = [
             type: 'file',
           },
           {
-            name: 'projects.md',
-            path: '/neil-mulder-portfolio/src/projects.md',
-            type: 'file',
+            name: 'projects',
+            path: '/neil-mulder-portfolio/src/projects',
+            type: 'folder',
+            isOpen: false,
+            children: [],
           },
         ],
       },
@@ -101,6 +106,9 @@ export const NeovimLayout: React.FC = () => {
   const [currentColumn, setCurrentColumn] = useState(1);
   const [isKeyboardActive, setIsKeyboardActive] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  
+  // Load projects data
+  const { data: projectsData, loading: projectsLoading, error: projectsError } = useProjects();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -113,7 +121,51 @@ export const NeovimLayout: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Effect to populate projects folder with individual project files
+  useEffect(() => {
+    if (!projectsLoading) {
+      const updateProjectsFolder = (items: FileItem[]): FileItem[] => {
+        return items.map(item => {
+          if (item.path === '/neil-mulder-portfolio/src/projects' && item.type === 'folder') {
+            // Generate project files based on API data or fallback
+            let projectFiles: { name: string; path: string; type: 'file'; content: string }[];
+            
+            if (projectsData && !projectsError) {
+              projectFiles = generateProjectsStructure(projectsData);
+            } else {
+              projectFiles = generateFallbackProjectsStructure();
+            }
+            
+            // Convert to FileItem format
+            const children: FileItem[] = projectFiles.map(project => ({
+              name: project.name,
+              path: project.path,
+              type: 'file',
+              content: project.content,
+            }));
+            
+            return {
+              ...item,
+              children,
+            };
+          }
+          
+          return {
+            ...item,
+            children: item.children ? updateProjectsFolder(item.children) : undefined,
+          };
+        });
+      };
+      
+      setFiles(prevFiles => updateProjectsFolder(prevFiles));
+    }
+  }, [projectsData, projectsLoading, projectsError]);
+
   const handleFileSelect = (file: FileItem) => {
+    // Track file selection
+    const fileExtension = file.name.split('.').pop() || 'unknown';
+    trackFileExplorerClick(file.name, fileExtension);
+    
     // Update active file in file tree
     const updateActiveFile = (items: FileItem[], targetPath: string): FileItem[] => {
       return items.map(item => ({
@@ -137,7 +189,7 @@ export const NeovimLayout: React.FC = () => {
         id: file.name.replace('.md', ''),
         name: file.name,
         path: file.path,
-        content: 'Loading...',
+        content: file.content || 'Loading...',
         isActive: true,
         isDirty: false,
       };
