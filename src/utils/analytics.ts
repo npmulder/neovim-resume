@@ -29,27 +29,29 @@ export const initializeAnalytics = () => {
     console.log('DataLayer after push:', window.dataLayer);
   };
 
-  // Load gtag script with debug mode
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}&l=dataLayer&cx=c`;
-  script.onload = () => console.log('GA4 script loaded successfully');
-  script.onerror = () => console.error('Failed to load GA4 script');
-  document.head.appendChild(script);
-
-  // Load debug script
-  const debugScript = document.createElement('script');
-  debugScript.src = 'https://www.googletagmanager.com/debug/bootstrap?id=' + GA_MEASUREMENT_ID + '&cb=' + Math.floor(Math.random() * 1000000);
-  debugScript.async = true;
-  document.head.appendChild(debugScript);
-
-  // Initialize gtag
+  // Initialize gtag immediately
   window.gtag('js', new Date());
   window.gtag('config', GA_MEASUREMENT_ID, {
     page_title: document.title,
     page_location: window.location.href,
     debug_mode: true,
   });
+
+  // Load gtag script with debug mode
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+  script.onload = () => {
+    console.log('GA4 script loaded successfully');
+    // Re-send config after script loads to ensure it's processed
+    window.gtag('config', GA_MEASUREMENT_ID, {
+      page_title: document.title,
+      page_location: window.location.href,
+      debug_mode: true,
+    });
+  };
+  script.onerror = () => console.error('Failed to load GA4 script');
+  document.head.appendChild(script);
   
   console.log('GA4 initialized with ID:', GA_MEASUREMENT_ID);
 };
