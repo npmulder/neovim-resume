@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import { initializeAnalytics, trackPageView } from "@/utils/analytics";
+import ReactGA from 'react-ga4';
 
 const queryClient = new QueryClient();
 
@@ -14,11 +14,11 @@ const AnalyticsWrapper = () => {
   const location = useLocation();
 
   useEffect(() => {
-    initializeAnalytics();
+    ReactGA.initialize('G-BBWK4RZD0K');
   }, []);
 
   useEffect(() => {
-    trackPageView(location.pathname + location.search);
+    ReactGA.send({ hitType: "pageview", page: location.pathname });
   }, [location]);
 
   return (

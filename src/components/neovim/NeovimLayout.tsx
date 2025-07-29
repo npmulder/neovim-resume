@@ -6,7 +6,7 @@ import { TabBar } from './TabBar';
 import { KeyboardHandler } from './KeyboardHandler';
 import { useProjects } from '@/hooks/useResumeData';
 import { generateProjectsStructure, generateFallbackProjectsStructure } from '@/utils/jsonToMarkdown';
-import { trackFileExplorerClick } from '@/utils/analytics';
+import ReactGA from 'react-ga4';
 
 export interface FileItem {
   name: string;
@@ -162,9 +162,16 @@ export const NeovimLayout: React.FC = () => {
   }, [projectsData, projectsLoading, projectsError]);
 
   const handleFileSelect = (file: FileItem) => {
-    // Track file selection
+    // Track file selection in Google Analytics
     const fileExtension = file.name.split('.').pop() || 'unknown';
-    trackFileExplorerClick(file.name, fileExtension);
+    
+    ReactGA.send({ hitType: "pageview", page: `${file.name} (${fileExtension})` });
+
+    ReactGA.event({
+      action: 'file_open',
+      category: 'navigation',
+      label: `${file.name} (${fileExtension})`
+    });
     
     // Update active file in file tree
     const updateActiveFile = (items: FileItem[], targetPath: string): FileItem[] => {
@@ -226,6 +233,15 @@ export const NeovimLayout: React.FC = () => {
   };
 
   const handleTabSelect = (tabId: string) => {
+    const selectedTab = tabs.find(tab => tab.id === tabId);
+    if (selectedTab) {
+      ReactGA.event({
+        action: 'tab_switch',
+        category: 'navigation',
+        label: selectedTab.name
+      });
+    }
+    
     setTabs(tabs.map(tab => ({
       ...tab,
       isActive: tab.id === tabId,
@@ -236,6 +252,11 @@ export const NeovimLayout: React.FC = () => {
     const toggleFolder = (items: FileItem[]): FileItem[] => {
       return items.map(item => {
         if (item.path === folderPath && item.type === 'folder') {
+          ReactGA.event({
+            action: item.isOpen ? 'folder_close' : 'folder_open',
+            category: 'navigation',
+            label: item.name
+          });
           return { ...item, isOpen: !item.isOpen };
         }
         return {
