@@ -67,11 +67,9 @@ const initialFiles: FileItem[] = [
             type: 'file',
           },
           {
-            name: 'projects',
-            path: '/neil-mulder-portfolio/src/projects',
-            type: 'folder',
-            isOpen: false,
-            children: [],
+            name: 'projects.md',
+            path: '/neil-mulder-portfolio/src/projects.md',
+            type: 'file',
           },
         ],
       },
@@ -79,12 +77,7 @@ const initialFiles: FileItem[] = [
         name: 'README.md',
         path: '/neil-mulder-portfolio/README.md',
         type: 'file',
-      },
-      {
-        name: 'package.json',
-        path: '/neil-mulder-portfolio/package.json',
-        type: 'file',
-      },
+      }
     ],
   },
 ];
